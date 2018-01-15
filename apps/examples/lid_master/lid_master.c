@@ -96,7 +96,7 @@ int lid_master_main(int argc, FAR char *argv[])
 {
 
   int ret;
-
+#if 1
   ret = task_create("master_monitor", CONFIG_EXAMPLES_MONITOR_PRIORITY,
                     CONFIG_EXAMPLES_MONITOR_STACKSIZE, master_monitor,
                     NULL);
@@ -225,10 +225,106 @@ int lid_master_main(int argc, FAR char *argv[])
 		//sleep(1);
 		//boardctl(BOARDIOC_LED_WAKEUP_DISABLE, 0);
 		//boardctl(BOARDIOC_LED_DEBUG_DISABLE, 0);
-
-		
-		
+	
   }
+#endif
+
+#if 0
+//new add by liubofei for test gprs alway online   2018-01-03
+  ret = task_create("master_monitor", CONFIG_EXAMPLES_MONITOR_PRIORITY,
+                    CONFIG_EXAMPLES_MONITOR_STACKSIZE, master_monitor,
+                    NULL);
+
+  if (ret < 0)
+    {
+      int errcode = errno;
+      printf("master_monitor: ERROR: Failed to start monitor: %d\n",
+             errcode);
+      return EXIT_FAILURE;
+    }
+  
+  ret = task_create("gprs", CONFIG_EXAMPLES_GPRS_PRIORITY,
+                    CONFIG_EXAMPLES_GPRS_STACKSIZE, master_gprs,
+                   NULL);
+     if (ret < 0)
+    {
+      int errcode = errno;
+      printf("gprs_main: ERROR: Failed to start gprs: %d\n",
+             errcode);
+      return EXIT_FAILURE;
+    }
+
+
+#endif	
+
+//new add by liubofei for test gprs alway online   2018-01-03
+#if 0
+  ret = task_create("gprs", CONFIG_EXAMPLES_GPRS_PRIORITY,
+                    CONFIG_EXAMPLES_GPRS_STACKSIZE, master_gprs,
+                   NULL);
+   if (ret < 0)
+    {
+      int errcode = errno;
+      printf("gprs_main: ERROR: Failed to start gprs: %d\n",
+             errcode);
+      return EXIT_FAILURE;
+    }
+
+int g_gprs_ret = FAIL;
+int cnt = 0;
+int  	iBytes	= 0;
+
+int fd_gprs_copy;
+
+	
+	fd_gprs_copy = open(CONFIG_EXAMPLES_GPRS_DEVPATH, O_RDWR | O_NOCTTY | O_NONBLOCK | O_NDELAY);
+	if (fd_gprs_copy < 0)
+	{
+		int errcode = errno;
+		printf("gprs: ERROR: Failed to open %s\n",CONFIG_EXAMPLES_GPRS_DEVPATH);
+	}
+	
+	while(g_gprs_ret == FAIL)
+	{
+		g_gprs_ret = gprs_rst(fd_gprs_copy,&GprsData);
+	}
+
+#if 0
+	while(1)
+	{
+		if(g_gprs_ret == SUCCESS)
+		{
+			printf("------SEND BUF-----\n");
+	/*		
+			sprintf(GprsData.msgbuf,"##time=20180102132920;msgtype=openlock#request;locker=on;mb=12.3;tempretrue=NULL;humidity=NULL;co=NULL;h2s=NULL;nh3=NULL;o2=NULL;water=0.00;sb=12.3;id=999@@");
+
+			GprsData.msglen = strlen(GprsData.msgbuf);
+			iBytes = write(fd_gprs_copy,GprsData.msgbuf,GprsData.msglen);
+
+			sleep(15);
+
+			sprintf(GprsData.msgbuf,"##time=20180102132920;msgtype=openlock#requestok;locker=on;mb=12.3;tempretrue=NULL;humidity=NULL;co=NULL;h2s=NULL;nh3=NULL;o2=NULL;water=0.00;sb=12.3;id=999@@");
+
+			GprsData.msglen = strlen(GprsData.msgbuf);
+			iBytes = write(fd_gprs_copy,GprsData.msgbuf,GprsData.msglen);
+
+			sleep(15);
+
+			sprintf(GprsData.msgbuf,"##time=20180102132920;msgtype=closelock#requestok;locker=off;mb=12.3;tempretrue=NULL;humidity=NULL;co=NULL;h2s=NULL;nh3=NULL;o2=NULL;water=0.00;sb=12.3;id=999@@");
+
+			GprsData.msglen = strlen(GprsData.msgbuf);
+			iBytes = write(fd_gprs_copy,GprsData.msgbuf,GprsData.msglen);
+*/
+			sprintf(GprsData.msgbuf,"GPRS ASK");
+
+			GprsData.msglen = strlen(GprsData.msgbuf);
+			iBytes = write(fd_gprs_copy,GprsData.msgbuf,GprsData.msglen);
+			
+			sleep(15);
+		}
+	}
+	#endif
+#endif
 
   return EXIT_SUCCESS;
 }

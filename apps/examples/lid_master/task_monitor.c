@@ -53,6 +53,9 @@ time_t		timelocal;
 
 struct  	TimeStruct_check  time_init;
 
+int 			g_gprs_ret = FAIL;
+
+
 ///////////////////////////////
 //new add by liubofei 2017-12-29
 
@@ -418,6 +421,28 @@ int	CheckTimeInt(void)
 	}
 }
 
+/*******************************************************
+*gprs_always_online  
+*
+* new add by liubofei 2017-12-29
+*******************************************************/
+
+void gprs_always_online(int fd,struct gprs_data	*gprsdata)
+{
+	int cnt = 0;
+	g_gprs_ret = FAIL;
+	
+	while(g_gprs_ret == FAIL)
+	{
+		g_gprs_ret = gprs_rst(fd,gprsdata);
+		if(cnt++ > 10)
+		{
+			cnt = 0;
+			//Gprsfail_buzz_alarm();			
+			break;
+		}
+	}
+}
 
 /****************************************************************************
  * warn_upload_process
@@ -460,7 +485,8 @@ void warn_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct ad
 	}
 	close(fd_sensora);
 	close(fd_sensorb);
-//end	
+//end
+/*
 	while(ret == FAIL)
 	{
 		ret = gprs_rst(fd,gprsdata);
@@ -473,6 +499,7 @@ void warn_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct ad
 	}
 		
 	if(ret == SUCCESS)
+*/	if(g_gprs_ret == SUCCESS)
 	{
 		ret = gprs_warn_upload(fd,gprsdata,adc_dada,sensor);
 		if(ret == SUCCESS)
@@ -537,7 +564,7 @@ void timeint_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct
 	close(fd_sensora);
 	close(fd_sensorb);
 //end
-	
+/*	
 	while(ret == FAIL)
 	{
 		ret = gprs_rst(fd,gprsdata);
@@ -550,6 +577,7 @@ void timeint_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct
 	}
 
 	if(ret == SUCCESS)
+*/	if(g_gprs_ret	== SUCCESS)
 	{
 		ret = gprs_timeint_upload(fd,gprsdata,adc_dada,sensor);
 		if(ret == SUCCESS)
@@ -609,7 +637,7 @@ void w315mhz_ask_openlock_process(int fd,int *locker,struct gprs_data	*gprsdata,
 		printf("fd_sensorb: open %s failed: %d\n", CONFIG_EXAMPLES_SENSORB_DEVPATH, errno);
 	}
 
-	
+	/*
 	while(ret == FAIL)
 	{
 		ret = gprs_rst(fd,gprsdata);
@@ -621,6 +649,8 @@ void w315mhz_ask_openlock_process(int fd,int *locker,struct gprs_data	*gprsdata,
 		}
 	}
 	if(ret == SUCCESS)
+	*/
+	if(g_gprs_ret	== SUCCESS)
 	{
         //changed by liubofei 2017-12-26
 		check_lockstate(fd_sensora,fd_sensorb,&Hall_Sensor);
@@ -741,6 +771,7 @@ void w315mhz_ask_closelock_process(int fd,int *locker,struct gprs_data	*gprsdata
 	close(fd_sensora);
 	close(fd_sensorb);
 //end
+/*
 	while(ret == FAIL)
 	{
 		ret = gprs_rst(fd,gprsdata);
@@ -752,6 +783,7 @@ void w315mhz_ask_closelock_process(int fd,int *locker,struct gprs_data	*gprsdata
 		}
 	}
 	if(ret == SUCCESS)
+*/	if(g_gprs_ret	== SUCCESS)	
 	{
 		sprintf(sensor->lockstr,"off");
 		ret = gprs_closelock(fd,gprsdata,adc_dada,sensor);
@@ -856,6 +888,12 @@ int master_monitor(int argc, char *argv[])
 	first_getvcc(&g_AdcConVar,&g_AdcMutex,DATA_NUM);
 	sleep(1);
 	//end
+	//new add by liubofei 2018-01-04 for gprs always online
+
+	gprs_always_online(fd_gprs_copy,&GprsData);
+
+	//end
+	/////////////////////////////////////////////////////////////////////////////////////////
 	while(1)
 	{
 		usleep(1000*1000L);                                     //sleep 100ms
@@ -922,7 +960,7 @@ int master_monitor(int argc, char *argv[])
 					}
 					
 					Msg485Data.type = WAIT;
-					boardctl(BOARDIOC_GPRS_PWROFF, 0);
+					//boardctl(BOARDIOC_GPRS_PWROFF, 0);
 				break;
 			//timeint upload	
 			case TIMEINT_UPLOAD:
@@ -932,7 +970,7 @@ int master_monitor(int argc, char *argv[])
 						timeint_upload_process(fd_gprs_copy,&Locker,&GprsData,&adcdata,&Hall_Sensor);
 					}
 					Msg485Data.type = WAIT;
-					boardctl(BOARDIOC_GPRS_PWROFF, 0);
+					//boardctl(BOARDIOC_GPRS_PWROFF, 0);
 				break;
 			//open lock
 			case OPEN_LOCK:
@@ -942,7 +980,7 @@ int master_monitor(int argc, char *argv[])
 						w315mhz_ask_openlock_process(fd_gprs_copy,&Locker,&GprsData,&adcdata,&Hall_Sensor);
 					}
 					Msg485Data.type = WAIT;
-					boardctl(BOARDIOC_GPRS_PWROFF, 0);
+					//boardctl(BOARDIOC_GPRS_PWROFF, 0);
 				break;
 			//close lock
 			case CLOSE_LOCK:
@@ -952,7 +990,7 @@ int master_monitor(int argc, char *argv[])
 						w315mhz_ask_closelock_process(fd_gprs_copy,&Locker,&GprsData,&adcdata,&Hall_Sensor);
 					}
 					Msg485Data.type = WAIT;
-					boardctl(BOARDIOC_GPRS_PWROFF, 0);
+					//boardctl(BOARDIOC_GPRS_PWROFF, 0);
 				break;
 		}
 		//bluetooth
@@ -971,7 +1009,7 @@ int master_monitor(int argc, char *argv[])
 					{
 						Msg485Data.type = WAIT;
 					}
-					boardctl(BOARDIOC_GPRS_PWROFF, 0);
+					//boardctl(BOARDIOC_GPRS_PWROFF, 0);
 				break;
 		}
 		/*************************************************************************/

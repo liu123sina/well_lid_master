@@ -79,6 +79,95 @@ struct	gprs_data	GprsData;
  * Private Functions
  ****************************************************************************/
 int  fd_gprs;
+int g_gprs_online_connect = 0;//new add by liubofei
+extern int g_gprs_ret;
+/****************************************************************************
+ * pthread_check_gprs_always_online
+ * liubofei
+ * 2018.01.09
+ ****************************************************************************/
+#if 1
+void pthread_check_gprs_always_online(void * arg)
+{
+	int  	iBytes	= 0;
+	int		gsm_cnt		= 0;
+	int 		time_cnt = 0;
+
+	GprsData.msg_gprs_online = NOACK;
+
+	//printf("------\n-----pthread-----\n------\n--------\n--------\n");
+
+	//while(GprsData->msg_gprs_online != GPRS_ONLINE)
+	while(1)
+	{
+		if(5 == gsm_cnt)// 5 min
+		{
+			gsm_cnt = 0;
+			printf("++++++++++++reset GSM modem+++++++++++\n");
+			//gprs_rst(fd_gprs,&GprsData);//reset GSM
+			gprs_always_online(fd_gprs,&GprsData);//reset GSM
+		}
+		//if((1 == g_gprs_online_connect) && (time_cnt++ > 200))//connect ok
+		if((time_cnt++ > 600))//600 -> 60s
+		{
+			printf("check_gprs_always_online--> check gprs status--001\n");
+
+			time_cnt = 0;
+			
+			if(GPRS_ONLINE == GprsData.msg_gprs_online)//server recv GPRS ALWAYS ONLINE 
+			{
+				gsm_cnt = 0;
+			}
+			
+		//	if(1 == g_gprs_online_connect)//connect ok
+			if(g_gprs_ret == SUCCESS)
+			{
+				printf("check_gprs_always_online--> check gprs status--002\n");
+
+				GprsData.msg_gprs_online = NOACK;
+				
+				memset(GprsData.msgbuf, 0, sizeof(GprsData.msgbuf));
+				sprintf(GprsData.msgbuf,"GPRS ASK");
+				GprsData.msglen = strlen(GprsData.msgbuf);
+				
+				while(GprsData.msg_gprs_online != GPRS_ONLINE)
+				{
+					iBytes = write(fd_gprs,GprsData.msgbuf,GprsData.msglen);
+
+					if(iBytes == -1)
+					{
+						printf("Error:write  Data to gprs--->GPRS ASK\n");
+					}
+				
+					sleep(8);
+					if(time_cnt++ > 6)
+					{
+						GprsData.msg_gprs_online = NOACK;
+						time_cnt = 0;
+						gsm_cnt ++;
+						break;
+					}
+				}
+			}
+			else
+			{
+				printf("check_gprs_always_online->g_gprs_ret = %d,gsm_cnt=%d\n",g_gprs_ret,gsm_cnt);
+				time_cnt = 0;
+				gsm_cnt++;
+			}
+		}
+		else
+		{
+		//	printf("check_gprs_always_online------>time_cnt=%d,gsm_cnt=%d\n",time_cnt,gsm_cnt);
+			usleep(100*1000);
+		}
+	}
+		GprsData.msg_gprs_online = NOACK;
+		//return SUCCESS;
+}
+
+#endif
+
 /****************************************************************************
  * gprs_warn_upload
  * liushuhe
@@ -652,7 +741,7 @@ int  gprs_rst(int fd,struct	gprs_data *gprs)
 {
 	int  	iBytes = 0;
 	int		ret;
-	
+	//g_gprs_online_connect = 0;//new add by liubofei for check connect 2018-01-09
 	//gprs
 	boardctl(BOARDIOC_GPRS_PWROFF, 0);
 	usleep(500*1000);
@@ -668,7 +757,7 @@ int  gprs_rst(int fd,struct	gprs_data *gprs)
 	{
 		printf("Error:write  Data to gprs\n");
 	}
-
+	
 	if(gprs_register(fd,gprs) == SUCCESS)
 	{
 		ret = gprs_tcpinit(fd,gprs);
@@ -871,11 +960,11 @@ int master_gprs(int argc, char *argv[])
 	int  	iRet = 0;
 	int  	iBytes = 0;
 	int  	rcvmsg_ok = 0;
-	
+
 	GprsData.msgack		= NOACK;
 	
 	g_gprs_started = true;
-
+	g_gprs_online_connect = 0;
 
 	fd_gprs = open(CONFIG_EXAMPLES_GPRS_DEVPATH, O_RDWR | O_NOCTTY | O_NONBLOCK | O_NDELAY);
 	if (fd_gprs < 0)
@@ -900,6 +989,27 @@ int master_gprs(int argc, char *argv[])
 	usleep(100*1000);
 	printf("gprs power on!!!\n");
 	*/
+/////	
+	/*****new add by liubofei for check gprs status 2018-01-09****/
+	pthread_t check_gprs_online = 1101;
+	pthread_attr_t attr_gprs_online;
+	void * result;
+	int err_gprs;
+#if 1
+	err_gprs = pthread_create(&check_gprs_online,NULL, pthread_check_gprs_always_online, NULL);
+	if(err_gprs != 0)
+	{
+		printf("----- PTHREAD ERROR AND CREATE----- 001\n");
+		//err_gprs = pthread_create(&check_gprs_online,NULL, pthread_check_gprs_always_online, NULL);
+	}/*
+	err_gprs = pthread_join(check_gprs_online, &result);
+	if(err_gprs != 0)
+	{
+		printf("----- PTHREAD ERROR ----- 002\n");
+	}*/
+#endif	
+
+/////	
 	while(1)
 	{
 	#ifndef MY_READ
@@ -928,6 +1038,10 @@ int master_gprs(int argc, char *argv[])
 			{
 				usleep(300*1000L);                                     //sleep 100ms
 				memset(cArray, 0, sizeof(cArray));
+				/*****new add by liubofei for check gprs status 2018-01-09****/
+
+
+				/*****end******/
 				//iBytes = read(fd_gprs, cArray, sizeof(cArray));
 				//iBytes = my_read(fd_gprs, cArray, sizeof(cArray));
 				iBytes = my_read2(fd_gprs, cArray, sizeof(cArray));
@@ -942,6 +1056,15 @@ int master_gprs(int argc, char *argv[])
 				/*************************************************************************************/
 				//deal  server ack
 
+				/****new add by liubofei for gprs online recv msg****/
+				
+				if(strstr(cArray,"ALWAYS ONLINE") != NULL)
+				{
+					GprsData.msg_gprs_online = GPRS_ONLINE;
+					printf("----GPRS ALWAYS ONLINE----\n");
+				}
+					
+				/********/
 
 				if(strstr(cArray,"#") != NULL)
 				{
@@ -988,6 +1111,7 @@ int master_gprs(int argc, char *argv[])
 				else if(strstr(cArray,"CONNECT") != NULL)
 				{
 					GprsData.msgack     = CONNECT;
+					//g_gprs_online_connect = 1;//new add by liubofei for gprs online 2018-01-09
 					printf("GPRS TCP:CONNECT OK\n");
 				}
 				else if(strstr(cArray,"OK") != NULL)

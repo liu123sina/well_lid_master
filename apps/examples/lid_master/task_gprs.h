@@ -18,6 +18,7 @@
 #define		START		4
 #define		RCV_OK		5
 #define		RCV_ERROR	101//new add by liubofei 2017-12-28
+#define		GPRS_ONLINE 102
 
 //set state
 #define		FAIL		0
@@ -58,6 +59,7 @@ struct  gprs_data
 	struct	ms_data upload_data;
 	char  msgbuf[255];
 	char  msglen;
+	char  msg_gprs_online;//new add by liubofei for check gprs online recv status 2018-01-09
 };
 
 
