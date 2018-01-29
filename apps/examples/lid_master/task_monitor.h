@@ -19,6 +19,9 @@
  ****************************************************************************/
 #define	CONFIG_EXAMPLES_RTC_DEVPATH	"/dev/rtc0"
 
+#define SYSTIME_NOINIT 	0
+#define SYSTIME_RTCINIT 	1
+
 extern		pthread_mutex_t g_TimIntMutex;
 extern		pthread_mutex_t g_MonitorMutex;
 extern 		struct  	TimeStruct 		DisLocalTime;
@@ -27,6 +30,8 @@ extern		time_t		timelocal;
 extern		struct 		rtc_time	rtctime;
 
 extern		char		TimeInt_SampleFlag;
+extern      struct  	TimeStruct_check  time_init;
+extern      struct  	TimeStruct_check  gprstime_init;
 
 /****************************************************************************
  * Private struct
@@ -42,7 +47,8 @@ struct  TimeStruct
     unsigned long  NTPSecond;
 	unsigned long  NTPSecond_check;
 	unsigned long  NTPSecond_tmp;
-	unsigned int   system_init;
+	unsigned int   system_init;	
+
 	
 };
 //new add by liubofei 2017-12-29

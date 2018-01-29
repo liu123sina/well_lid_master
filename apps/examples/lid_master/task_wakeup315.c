@@ -151,6 +151,10 @@ int wakeup_315(int argc, char *argv[])
 		printf("slave_wakeup: open %s failed: %d\n", CONFIG_EXAMPLES_WKUP315_DEVPATH, errno);
 		goto errout;
 	}
+
+	printf("wakeup_315 start .............................................................\n");
+
+	
 	/*
 	ret = ioctl(fd_wakeup, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
 	if (ret < 0)

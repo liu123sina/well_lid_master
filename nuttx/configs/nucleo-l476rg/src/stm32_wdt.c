@@ -52,6 +52,7 @@
 
 #include <nuttx/kthread.h>
 #include <nuttx/clock.h>
+#include <sys/boardctl.h>
 
 /************************************************************************************
  * Public Functions
@@ -85,10 +86,24 @@ static int wdog_daemon(int argc, char *argv[])
         wderr("ERROR: ioctl(WDIOC_START) failed: %d\n", errno);
         goto exit_close_dev;
     }
+  
+  int temp = 0;
 
   while(1)
     {
       usleep((CONFIG_STM32L476_WDG_THREAD_INTERVAL)*1000);
+
+	  puts("wdog...active...wdog...active...wdog...active...wdog...active...wdog...active...wdog...active...\n");
+
+	  temp++;
+	  if(temp%2 == 1)
+	  {
+		  boardctl(BOARDIOC_LED_DEBUG_ENABLE, 0);		
+	  }
+	  else
+	  {
+		  boardctl(BOARDIOC_LED_DEBUG_DISABLE, 0);		
+	  }
 
       /* Send keep alive ioctl */
 

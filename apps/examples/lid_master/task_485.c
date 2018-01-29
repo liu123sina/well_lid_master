@@ -296,6 +296,9 @@ int master_485(int argc, char *argv[])
 		printf("485: ERROR: Failed to open %s: %d\n",CONFIG_EXAMPLES_485_DEVPATH, errcode);
 		goto errout;
 	}
+
+
+	printf("master_485 start .............................................................\n");
 	
 	while(1)
 	{

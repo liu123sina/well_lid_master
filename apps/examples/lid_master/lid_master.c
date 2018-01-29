@@ -204,12 +204,16 @@ int lid_master_main(int argc, FAR char *argv[])
       return EXIT_FAILURE;
     }
 
+  printf("lid_master_main start .............................................................\n");
 
+  sleep(5);
+  
   while(1)	
   {
   		usleep(500*1000);
-		//*((int *)(0x00100000)) = 0;
+		
 		getSystime_check();
+		
 		#if 1//for to test
   		if((1==CheckTimeInt())&&(0 == TimeInt_SampleFlag))
   		{

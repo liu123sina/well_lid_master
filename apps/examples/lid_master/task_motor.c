@@ -391,6 +391,9 @@ int master_motor(int argc, char *argv[])
 		printf("fd_sensorB: open %s failed: %d\n", CONFIG_EXAMPLES_SENSORB_DEVPATH, errno);
 		goto errout;
 	}
+
+	printf("master_motor start .............................................................\n");
+	
 	//close by liubofei 2017-12-26
 	/*
 	fd_light = open(CONFIG_EXAMPLES_LIGHT315_DEVPATH, O_RDONLY);

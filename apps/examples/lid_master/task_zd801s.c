@@ -105,6 +105,9 @@ int alarm_zd801s(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	printf("alarm_zd801s start .............................................................\n");
+
+
 	//signal
 	memset(&act, 0, sizeof(struct sigaction));
 	act.sa_sigaction = zd801s_action;

@@ -118,6 +118,10 @@ int closelock_315(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	printf("closelock_315 start .............................................................\n");
+
+
+
 	//signal
 	memset(&act, 0, sizeof(struct sigaction));
 	act.sa_sigaction = close315_action;

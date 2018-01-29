@@ -57,6 +57,7 @@ char * mid(char *dst,char *src, int n,int m) /*n为长度，m为位置*/
 void analyflashdata1(char **pcTempBuf,int cCharNum)
 {
     char   TempBuf[100];
+	float  temp =0;
     int    i = 0;
     for(i=0;i<cCharNum;i++)
     {
@@ -110,9 +111,12 @@ void analyflashdata1(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-3),3);
-			if(strstr(TempBuf,"NULL") != NULL)
+			//非数字字符串转化为0
+			//atof("NULL") = 0.00
+			if(0.00 == atof(TempBuf))
 			{
 				alarmdata.vcc_mb = VCC_MB_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -134,14 +138,18 @@ void analyflashdata1(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-11),11);
-			if(strstr(TempBuf,"NULL") != NULL)
+			//非数字字符串转化为0
+			//atof("NULL") = 0.00
+			if(0.00 == atof(TempBuf))
 			{
 				alarmdata.tempretrue = TEMPRETURE_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
 				alarmdata.tempretrue = atof(TempBuf);
 			}
+			
 			printf("tempretrue= %s,%.2f\n",TempBuf,alarmdata.tempretrue);
             //out
             break;
@@ -158,9 +166,12 @@ void analyflashdata1(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-9),9);
-			if(strstr(TempBuf,"NULL") != NULL)
+			//非数字字符串转化为0
+			//atof("NULL") = 0.00
+			if(0.00 == atof(TempBuf))
 			{
 				alarmdata.humidity = HUMIDITY_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -182,9 +193,12 @@ void analyflashdata1(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-3),3);
-			if(strstr(TempBuf,"NULL") != NULL)
+			//非数字字符串转化为0
+			//atof("NULL") = 0.00
+			if(0.00 == atof(TempBuf))
 			{
 				alarmdata.co = CO_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -206,9 +220,12 @@ void analyflashdata1(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-4),4);
-			if(strstr(TempBuf,"NULL") != NULL)
+			//非数字字符串转化为0
+			//atof("NULL") = 0.00
+			if(0.00 == atof(TempBuf))
 			{
 				alarmdata.h2s = H2S_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -230,9 +247,12 @@ void analyflashdata1(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-4),4);
-			if(strstr(TempBuf,"NULL") != NULL)
+			//非数字字符串转化为0
+			//atof("NULL") = 0.00
+			if(0.00 == atof(TempBuf))
 			{
 				alarmdata.nh3 = NH3_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -254,9 +274,12 @@ void analyflashdata1(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-3),3);
-			if(strstr(TempBuf,"NULL") != NULL)
+			//非数字字符串转化为0
+			//atof("NULL") = 0.00
+			if(0.00 == atof(TempBuf))
 			{
 				alarmdata.o2 = O2_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -278,9 +301,12 @@ void analyflashdata1(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-6),6);
-			if(strstr(TempBuf,"NULL") != NULL)
+			//非数字字符串转化为0
+			//atof("NULL") = 0.00
+			if(0.00 == atof(TempBuf))
 			{
 				alarmdata.water = WATER_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -354,9 +380,9 @@ void analyflashdata2(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-3),3);
-			if(strstr(TempBuf,"NULL") != NULL)
+			if(0.00 == atof(TempBuf))
 			{
-				//alarmdata.vcc_mb = VCC_MB_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -374,9 +400,9 @@ void analyflashdata2(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-11),11);
-			if(strstr(TempBuf,"NULL") != NULL)
+			if(0.00 == atof(TempBuf))
 			{
-				//alarmdata.tempretrue = TEMPRETURE_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -394,9 +420,9 @@ void analyflashdata2(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-9),9);
-			if(strstr(TempBuf,"NULL") != NULL)
+			if(0.00 == atof(TempBuf))
 			{
-				//alarmdata.humidity = HUMIDITY_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -414,9 +440,9 @@ void analyflashdata2(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-3),3);
-			if(strstr(TempBuf,"NULL") != NULL)
+			if(0.00 == atof(TempBuf))
 			{
-				//alarmdata.co = CO_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -434,9 +460,9 @@ void analyflashdata2(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-4),4);
-			if(strstr(TempBuf,"NULL") != NULL)
+			if(0.00 == atof(TempBuf))
 			{
-				//alarmdata.h2s = H2S_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -454,9 +480,9 @@ void analyflashdata2(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-4),4);
-			if(strstr(TempBuf,"NULL") != NULL)
+			if(0.00 == atof(TempBuf))
 			{
-				//alarmdata.nh3 = NH3_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -474,9 +500,9 @@ void analyflashdata2(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-3),3);
-			if(strstr(TempBuf,"NULL") != NULL)
+			if(0.00 == atof(TempBuf))
 			{
-				//alarmdata.o2 = O2_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -494,9 +520,9 @@ void analyflashdata2(char **pcTempBuf,int cCharNum)
 		{
 			memset(TempBuf, 0, sizeof(TempBuf));
 			mid(TempBuf,pcTempBuf[i],(strlen(pcTempBuf[i])-6),6);
-			if(strstr(TempBuf,"NULL") != NULL)
+			if(0.00 == atof(TempBuf))
 			{
-				//alarmdata.water = WATER_DEF;
+				printf("parsing alarm no change!!!\n");
 			}
 			else
 			{
@@ -595,6 +621,7 @@ int master_flash(int argc, char *argv[])
 	}
 	close(fd);
 	
+	printf("master_flash start .............................................................\n");
 
 	while(1)
 	{
