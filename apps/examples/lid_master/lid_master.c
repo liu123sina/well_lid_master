@@ -97,7 +97,7 @@ int lid_master_main(int argc, FAR char *argv[])
 
   int ret;
 
-  printf("\nLid_master Version =%s\n",VERSION);
+  printf("\nLid_master Version =%s\nDEV_ID=%d\n",VERSION,DEV_ID);
 
   ret = task_create("master_monitor", CONFIG_EXAMPLES_MONITOR_PRIORITY,
                     CONFIG_EXAMPLES_MONITOR_STACKSIZE, master_monitor,
