@@ -586,6 +586,21 @@ int board_ioctl(unsigned int cmd, uintptr_t arg)
 			}
 		    break;
 		/*********************************************************/
+		/********************************************************/
+		//new add by liubofei 2018-01-29
+		case BOARDIOC_EXT_WDT_PWRON:
+		  	{
+				 stm32l4_configgpio(EXT_WDT_ONOFF);
+				 stm32l4_gpiowrite(EXT_WDT_ONOFF,true);
+			}
+		    break;
+		case BOARDIOC_EXT_WDT_PWROFF:
+		  	{
+				 stm32l4_configgpio(EXT_WDT_ONOFF);
+				 stm32l4_gpiowrite(EXT_WDT_ONOFF,false);
+			}
+		    break;
+		/***************************************************/	
 		default:
 				return -ENOTTY;
 				break;

@@ -399,10 +399,10 @@ int	CheckTimeInt(void)
 	//获取本地时间
 	//getSystime();//close by liubofei 2017-12-29 重复调用
 	
-	printf("time:%04d-%02d-%02d-%02d-%02d-%02d\n",DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second);
-	printf("alarmdata.timingA:%d-%d,alarmdata.timingB:%d-%d\n",alarmdata.timingA_hour,alarmdata.timingA_min,alarmdata.timingB_hour,alarmdata.timingB_min);
-	printf("SensorDate.adcmsg->VCC_middle =%.1f,SensorDate.adcmsg->Water_high=%.2f\n",SensorDate.adcmsg->VCC_middle,SensorDate.adcmsg->Water_high);
-	printf("alarmdata.vcc_mb=%.1f,alarmdata.water=%.2f\n",alarmdata.vcc_mb,alarmdata.water);
+	//printf("time:%04d-%02d-%02d-%02d-%02d-%02d\n",DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second);
+	//printf("alarmdata.timingA:%d-%d,alarmdata.timingB:%d-%d\n",alarmdata.timingA_hour,alarmdata.timingA_min,alarmdata.timingB_hour,alarmdata.timingB_min);
+	//printf("SensorDate.adcmsg->VCC_middle =%.1f,SensorDate.adcmsg->Water_high=%.2f\n",SensorDate.adcmsg->VCC_middle,SensorDate.adcmsg->Water_high);
+	//printf("alarmdata.vcc_mb=%.1f,alarmdata.water=%.2f\n",alarmdata.vcc_mb,alarmdata.water);
 	/*
 	if(((0 == alarmdata.timingA_hour)&&(0 == alarmdata.timingA_min)) || ((0 == alarmdata.timingB_hour)&&(0 == alarmdata.timingB_min)))
 	{
@@ -896,9 +896,9 @@ int master_monitor(int argc, char *argv[])
 			}
 			SensorDate.adcmsg->VCC_middle=filter(DATA_NUM);
 			
-			printf("%s: value: %.2f %.1fv\n", "VCC_middle",SensorDate.adcmsg->VCC_middle,(int)(SensorDate.adcmsg->VCC_middle*10)/10.0);
-			printf("%s: value: %.2f m\n", "SensorDate.adcmsg.Water_high", SensorDate.adcmsg->Water_high);
-			printf("%s: value: %.2f v\n", "SensorDate.adcmsg.Light", SensorDate.adcmsg->Light);
+			//printf("%s: value: %.2f %.1fv\n", "VCC_middle",SensorDate.adcmsg->VCC_middle,(int)(SensorDate.adcmsg->VCC_middle*10)/10.0);
+			//printf("%s: value: %.2f m\n", "SensorDate.adcmsg.Water_high", SensorDate.adcmsg->Water_high);
+			//printf("%s: value: %.2f v\n", "SensorDate.adcmsg.Light", SensorDate.adcmsg->Light);
 
 			//end
 			
@@ -907,9 +907,9 @@ int master_monitor(int argc, char *argv[])
 			//changed by liubofei 2017-12-26
 			//if((SensorDate.adcmsg->VCC <= alarmdata.vcc_mb)||(SensorDate.adcmsg->Water_high >= alarmdata.water ))
 			
-			printf("SensorDate.adcmsg->VCC_middle =%.1f,SensorDate.adcmsg->Water_high=%.2f\n",SensorDate.adcmsg->VCC_middle,SensorDate.adcmsg->Water_high);
-			printf("alarmdata.vcc_mb=%.1f,alarmdata.water=%.2f\n",alarmdata.vcc_mb,alarmdata.water);
-			printf("timingA=%2d:%2d,timingB=%2d:%2d\n",alarmdata.timingA_hour,alarmdata.timingA_min,alarmdata.timingB_hour,alarmdata.timingB_min);
+			//printf("SensorDate.adcmsg->VCC_middle =%.1f,SensorDate.adcmsg->Water_high=%.2f\n",SensorDate.adcmsg->VCC_middle,SensorDate.adcmsg->Water_high);
+			//printf("alarmdata.vcc_mb=%.1f,alarmdata.water=%.2f\n",alarmdata.vcc_mb,alarmdata.water);
+			//printf("timingA=%2d:%2d,timingB=%2d:%2d\n",alarmdata.timingA_hour,alarmdata.timingA_min,alarmdata.timingB_hour,alarmdata.timingB_min);
 			if((SensorDate.adcmsg->VCC_middle <= alarmdata.vcc_mb)||(SensorDate.adcmsg->Water_high >= alarmdata.water ))
 			{
 				//add by liushuhe 2018.01.23    

@@ -79,7 +79,7 @@
 #include "task_close315.h"
 #include "task_zd801s.h"
 #include "task_flash.h"
-
+#include "task_wdt.h"
 
 
 /****************************************************************************
@@ -203,6 +203,21 @@ int lid_master_main(int argc, FAR char *argv[])
              errcode);
       return EXIT_FAILURE;
     }
+
+
+/**********************/
+//new add by liubofei for wdt 2018-01-29x
+  ret = task_create("master_wdt", CONFIG_EXAMPLES_WDT_PRIORITY,
+                    CONFIG_EXAMPLES_WDT_STACKSIZE, master_wdt,
+                    NULL);
+  if (ret < 0)
+    {
+      int errcode = errno;
+      printf("master_wdt: ERROR: Failed to start wdt: %d\n",
+             errcode);
+      return EXIT_FAILURE;
+    }
+/********************/
 
   printf("lid_master_main start .............................................................\n");
 

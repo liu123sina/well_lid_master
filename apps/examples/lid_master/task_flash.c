@@ -57,7 +57,7 @@ char * mid(char *dst,char *src, int n,int m) /*n为长度，m为位置*/
 void analyflashdata1(char **pcTempBuf,int cCharNum)
 {
     char   TempBuf[100];
-	float  temp =0;
+//	float  temp =0;
     int    i = 0;
     for(i=0;i<cCharNum;i++)
     {

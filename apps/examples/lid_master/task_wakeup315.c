@@ -136,11 +136,11 @@ int check_wakeup_sinal(int fd,struct	hall_sensor *sensor)
  ****************************************************************************/
 int wakeup_315(int argc, char *argv[])
 {
-	enum gpio_pintype_e pintype;
-	struct sigaction act;
-	struct sigaction oldact;
-	int ret;
-	int status;
+	//enum gpio_pintype_e pintype;
+	//struct sigaction act;
+	//struct sigaction oldact;
+	//int ret;
+	//int status;
 	int cnt = 0;
 	
 	g_wakeup315_started = true;

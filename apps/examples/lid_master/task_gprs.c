@@ -856,8 +856,8 @@ int my_read2(int fd, char *buffer, int length)
  ****************************************************************************/
 int master_gprs(int argc, char *argv[])
 {
-	struct timeval timeout;
-	fd_set 	rfds;	
+	//struct timeval timeout;
+	//fd_set 	rfds;	
 	
 	int		fd_rtc;
 	
@@ -869,7 +869,7 @@ int master_gprs(int argc, char *argv[])
 	char 	cArray[200];
 	char 	rcvmsg[200];
 	
-	int  	iRet = 0;
+	//int  	iRet = 0;
 	int  	iBytes = 0;
 	int  	rcvmsg_ok = 0;
 	

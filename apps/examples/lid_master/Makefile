@@ -51,7 +51,7 @@ STACKSIZE = $(CONFIG_EXAMPLES_LID_MASTER_STACKSIZE)
 
 ASRCS =
 CSRCS =
-MAINSRC = lid_master.c task_monitor.c task_485.c task_gprs.c task_bluetooth.c  task_motor.c task_wakeup315.c task_close315.c task_zd801s.c task_adc.c  task_flash.c 
+MAINSRC = lid_master.c task_monitor.c task_485.c task_gprs.c task_bluetooth.c  task_motor.c task_wakeup315.c task_close315.c task_zd801s.c task_adc.c  task_flash.c task_wdt.c
 
 CONFIG_EXAMPLES_LID_MASTER_PROGNAME ?= lid_master(EXEEXT)
 PROGNAME = $(CONFIG_EXAMPLES_LID_MASTER_PROGNAME)

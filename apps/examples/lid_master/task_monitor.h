@@ -81,7 +81,7 @@ int   setSystime(struct rtc_time *rtc);
 int   setRtcTime(int fd,struct rtc_time *rtc);
 int   getRtcTime(int fd,struct rtc_time *rtc);
 int	  CheckTimeInt(void);
-
+void  getSystime_check(void);
 
 
 #ifdef __cplusplus
