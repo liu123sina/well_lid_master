@@ -458,7 +458,7 @@ void warn_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct ad
 	{
 		check_lockstate(fd_sensora,fd_sensorb,&Hall_Sensor);
 		usleep(500*1000);//0.5s
-		if(cnt_lock++ > 60)
+		if(cnt_lock++ > 30)
 		{
 				cnt_lock = 0;
 			//	close(fd_sensora);
@@ -534,7 +534,7 @@ void timeint_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct
 	{
 		check_lockstate(fd_sensora,fd_sensorb,&Hall_Sensor);
 		usleep(500*1000);//0.5s
-		if(cnt_lock++ > 60)
+		if(cnt_lock++ > 30)
 		{
 				cnt_lock = 0;
 				//close(fd_sensora);
@@ -679,7 +679,7 @@ void w315mhz_ask_openlock_process(int fd,int *locker,struct gprs_data	*gprsdata,
 			{
 				check_lockstate(fd_sensora,fd_sensorb,&Hall_Sensor);
 				usleep(500*1000);//0.5s
-				if(cnt_lock++ > 60)
+				if(cnt_lock++ > 30)
 				{
 					cnt_lock = 0;
 					break;
@@ -738,7 +738,7 @@ void w315mhz_ask_closelock_process(int fd,int *locker,struct gprs_data	*gprsdata
 	{
 		check_lockstate(fd_sensora,fd_sensorb,&Hall_Sensor);
 		usleep(500*1000);//0.5s
-		if(cnt_lock++ > 60)
+		if(cnt_lock++ > 30)
 		{
 				cnt_lock = 0;
 				//close(fd_sensora);
@@ -766,6 +766,12 @@ void w315mhz_ask_closelock_process(int fd,int *locker,struct gprs_data	*gprsdata
 		if(ret == SUCCESS)
 		{
 			gprsdata->process_state = SUCCESS;
+#if 1
+			/*************************************/
+			printf("\nCCCCCCCC\nCCCCCCCCCCCCCC\nCCCCCCCCCCCCCCC\n");
+			Gprs_put_success_alarm();
+			/*************************************/
+#endif
 		}
 		else
 		{

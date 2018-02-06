@@ -305,7 +305,7 @@ int master_485(int argc, char *argv[])
 	
 		FD_ZERO(&rfds);											
 		FD_SET(fd_485, &rfds);									
-		timeout.tv_sec = 4;
+		timeout.tv_sec = 1;
 		timeout.tv_usec = 0;
 		iRet = select(fd_485+1, &rfds, NULL, NULL, &timeout);  	//recv-timeout
 

@@ -115,8 +115,8 @@ int  gprs_warn_upload(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,str
 			printf("Error:write  Data to gprs\n");
 		}
 	
-		sleep(8);
-		if(cnt++ >= 5)
+		sleep(3);
+		if(cnt++ >= 2)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -162,8 +162,8 @@ int  gprs_timeint_upload(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,
 		{
 			printf("Error:write  Data to gprs\n");
 		}
-		sleep(8);
-		if(cnt++ >= 5)
+		sleep(3);
+		if(cnt++ >= 2)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -215,8 +215,8 @@ int  gprs_openlock(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,struct
 			printf("Error:write  Data to gprs\n");
 		}
 		//wait
-		sleep(8);
-		if(cnt++ >= 5)
+		sleep(3);
+		if(cnt++ >= 2)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -264,8 +264,8 @@ int  gprs_closelock(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,struc
 			printf("Error:write  Data to gprs\n");
 		}
 		//wait
-		sleep(8);
-		if(cnt++ >= 5)
+		sleep(3);
+		if(cnt++ >= 2)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -482,8 +482,12 @@ int  into_establish(int fd,struct	gprs_data *gprs)
 			printf("into_establish---> while(1)--RCV_ERROR\n");
 			break;
 		}
+		/*
 		usleep(1000*1000);
 		if(cnt++ > 30)
+		*/
+		usleep(500*1000);
+		if(cnt++ > 10)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -632,9 +636,12 @@ int  gprs_register(int fd,struct	gprs_data *gprs)
 		{
 			printf("Error:write  Data to gprs\n");
 		}
-	
+		/*
 		sleep(1);
 		if(cnt++ > 60)
+		*/
+		usleep(500*1000);
+		if(cnt++ > 30)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;

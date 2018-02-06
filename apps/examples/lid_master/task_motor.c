@@ -160,7 +160,31 @@ void	buzz_alarm(void)
 	ioctl(fd, PWMIOC_STOP, 0);
 	close(fd);
 }
-
+/****************************************************************************
+ * Gprs_put_success_alarm
+ * liubofei
+ * 2018.02.06
+ ****************************************************************************/
+void	Gprs_put_success_alarm(void)
+{
+	int fd;
+	fd = open(CONFIG_EXAMPLES_BUZZPWM_DEVPATH, O_RDONLY);
+	if (fd < 0)
+	{
+		printf("buzz_fd: open %s failed: %d\n", CONFIG_EXAMPLES_BUZZPWM_DEVPATH, errno);
+	}
+	/*
+	buzzalarm_pwm_init(fd);
+	ioctl(fd, PWMIOC_START, 0);
+	sleep(2);
+	ioctl(fd, PWMIOC_STOP, 0);
+	close(fd);
+	*/
+	buzzon_pwm_init(fd);
+	ioctl(fd, PWMIOC_START, 0);
+	sleep(2);
+	ioctl(fd, PWMIOC_STOP, 0);
+}
 /****************************************************************************
  * Gprsfail_buzz_alarm
  * liushuhe
