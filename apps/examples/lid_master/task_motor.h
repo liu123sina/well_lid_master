@@ -80,7 +80,7 @@ void	buzz_alarm(void);
 void	buzzalarm_pwm_init(int fd);
 int		check_light_315sinal(int fd,struct	hall_sensor *sensor);
 void	Gprsfail_buzz_alarm(void);
-
+void	Gprs_put_success_alarm(void);
 
 
 #ifdef __cplusplus
