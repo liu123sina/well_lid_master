@@ -21,9 +21,9 @@
 #define		O2_DEF				70.1	
 #define		WATER_DEF			2.5	
 
-#define		DEV_ID				182001//for test ID
+#define		DEV_ID				999//for test ID
 
-#define		VERSION				"2018-02-05_V1.5"//date + version
+#define		VERSION				"2018-02-06_V1.6"//date + version
 struct alarm_value
 {
 	char msg[200];
