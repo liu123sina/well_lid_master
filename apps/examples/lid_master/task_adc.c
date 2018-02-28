@@ -214,6 +214,9 @@ int master_adc(int argc, char *argv[])
 	
 	SensorDate.adcmsg	= &adcdata;
 	SensorDate.i2cmsg	= &i2cdata;
+
+	printf("master_adc start .............................................................\n");
+
 	
 	while(1)
 	{

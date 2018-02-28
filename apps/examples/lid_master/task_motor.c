@@ -160,7 +160,31 @@ void	buzz_alarm(void)
 	ioctl(fd, PWMIOC_STOP, 0);
 	close(fd);
 }
-
+/****************************************************************************
+ * Gprs_put_success_alarm
+ * liubofei
+ * 2018.02.06
+ ****************************************************************************/
+void	Gprs_put_success_alarm(void)
+{
+	int fd;
+	fd = open(CONFIG_EXAMPLES_BUZZPWM_DEVPATH, O_RDONLY);
+	if (fd < 0)
+	{
+		printf("buzz_fd: open %s failed: %d\n", CONFIG_EXAMPLES_BUZZPWM_DEVPATH, errno);
+	}
+	/*
+	buzzalarm_pwm_init(fd);
+	ioctl(fd, PWMIOC_START, 0);
+	sleep(2);
+	ioctl(fd, PWMIOC_STOP, 0);
+	close(fd);
+	*/
+	buzzon_pwm_init(fd);
+	ioctl(fd, PWMIOC_START, 0);
+	sleep(2);
+	ioctl(fd, PWMIOC_STOP, 0);
+}
 /****************************************************************************
  * Gprsfail_buzz_alarm
  * liushuhe
@@ -391,6 +415,9 @@ int master_motor(int argc, char *argv[])
 		printf("fd_sensorB: open %s failed: %d\n", CONFIG_EXAMPLES_SENSORB_DEVPATH, errno);
 		goto errout;
 	}
+
+	printf("master_motor start .............................................................\n");
+	
 	//close by liubofei 2017-12-26
 	/*
 	fd_light = open(CONFIG_EXAMPLES_LIGHT315_DEVPATH, O_RDONLY);

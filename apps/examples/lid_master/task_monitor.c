@@ -52,7 +52,7 @@ struct 		rtc_time	rtctime;
 time_t		timelocal;
 
 struct  	TimeStruct_check  time_init;
-
+struct  	TimeStruct_check  gprstime_init;
 int 			g_gprs_ret = FAIL;
 
 
@@ -211,7 +211,7 @@ void CalcSecond_BdGps(struct TimeStruct_check *time,int styear)
     time->NTPSecond = time->NTPSecond	+(time->Day - 1) *NTPDay*NTPHour*NTPMin\
                         + time->Hour*NTPHour*NTPMin + time->Minute*NTPMin + time->Second ;
    // time->NTPSecond = time->NTPSecond + 8*3600;
-   /*if(DisLocalTime.system_init == 0)
+   /*if(DisLocalTime.system_init == SYSTIME_NOINIT)
    {
    		time->NTPSecond_tmp = time->NTPSecond;
    }
@@ -261,7 +261,7 @@ void  getSystime_check(void)
 		
 	//printf("--getSystime_check(void)-->DisLocalTime.system_init=%d\n",DisLocalTime.system_init);
 
-	if(DisLocalTime.system_init == 0)//设备第一次开机
+	if(DisLocalTime.system_init == SYSTIME_NOINIT)//设备第一次开机
 	{
 		
 		CalcSecond_BdGps(&time_init,1900);
@@ -269,40 +269,46 @@ void  getSystime_check(void)
 		time_init.NTPSecond_tmp = time_init.NTPSecond;
 		////DealIntegerTime(time_init.NTPSecond_check,&DisLocalTime,1900);
 		
-		DisLocalTime.system_init = 1;
+		DisLocalTime.Year   = time_init.Year;
+		DisLocalTime.Month  = time_init.Month;
+		DisLocalTime.Day    = time_init.Day;
+		DisLocalTime.Hour   = time_init.Hour;
+		DisLocalTime.Minute = time_init.Minute;
+		DisLocalTime.Second = time_init.Second;
+		
+		DisLocalTime.system_init = SYSTIME_RTCINIT;
 	}
 	else
 	{
 		CalcSecond_BdGps(&time_init,1900);
 
 		//printf("time_init.NTPSecond_tmp= %u\ntime_init.NTPSecond=%u\n",time_init.NTPSecond_tmp ,time_init.NTPSecond);
-	
+
 		if((time_init.NTPSecond_tmp > 0) && (time_init.NTPSecond > 0))
 		{
 			//if(time_init.NTPSecond - time_init.NTPSecond_tmp == 1)
 			////if((abs (time_init.NTPSecond - time_init.NTPSecond_tmp) < 60) )
-			if(((time_init.NTPSecond - time_init.NTPSecond_tmp) < 60) && ((time_init.NTPSecond - time_init.NTPSecond_tmp) > 0))
+			if((abs(time_init.NTPSecond - time_init.NTPSecond_tmp) < 60) && ((time_init.NTPSecond - time_init.NTPSecond_tmp) > 0))
 			{
 				time_init.NTPSecond_check = time_init.NTPSecond;
 				time_init.NTPSecond_tmp  = time_init.NTPSecond;
-
 				DealIntegerTime(time_init.NTPSecond_check,&DisLocalTime,1900);
-				
 			}
 			else if(0 == (time_init.NTPSecond - time_init.NTPSecond_tmp))//因为500ms取一次值，NTPSecond 是按秒计算的，会有重复值 
 			{
 			}
 			else
 			{
+			
 				printf("----ERROR---- [ time_init.NTPSecond  ]\n");
-				DisLocalTime.system_init = 0;//异常后置为 0 ，重新获取新数据存放到变量里
+				
+				DisLocalTime.system_init = SYSTIME_NOINIT;//异常后置为 0 ，重新获取新数据存放到变量里
 				////time_init.NTPSecond ++;
+				
 			}
-			printf("LIUBOFEI-->time:%d-%d-%d-%d-%d-%d\n",DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,
-						  DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second);
+			printf("LIUBOFEI-->time:%04d-%02d-%02d-%02d-%02d-%02d\n",DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second);
 		}
 	}
-	
 }
 ///////////////////////////////////////////////////////////
 
@@ -391,13 +397,14 @@ int getRtcTime(int fd,struct rtc_time *rtc)
 *******************************************************************************************************************************/
 int	CheckTimeInt(void)
 {
+
 	//获取本地时间
 	//getSystime();//close by liubofei 2017-12-29 重复调用
 	
-	printf("time:%d-%d-%d-%d-%d-%d\n",DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,
-						  DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second);
-		printf("alarmdata.timingA:%d-%d,alarmdata.timingB:%d-%d\n",alarmdata.timingA_hour,alarmdata.timingA_min,alarmdata.timingB_hour,
-						  alarmdata.timingB_min);
+	//printf("time:%04d-%02d-%02d-%02d-%02d-%02d\n",DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second);
+	//printf("alarmdata.timingA:%d-%d,alarmdata.timingB:%d-%d\n",alarmdata.timingA_hour,alarmdata.timingA_min,alarmdata.timingB_hour,alarmdata.timingB_min);
+	//printf("SensorDate.adcmsg->VCC_middle =%.1f,SensorDate.adcmsg->Water_high=%.2f\n",SensorDate.adcmsg->VCC_middle,SensorDate.adcmsg->Water_high);
+	//printf("alarmdata.vcc_mb=%.1f,alarmdata.water=%.2f\n",alarmdata.vcc_mb,alarmdata.water);
 	/*
 	if(((0 == alarmdata.timingA_hour)&&(0 == alarmdata.timingA_min)) || ((0 == alarmdata.timingB_hour)&&(0 == alarmdata.timingB_min)))
 	{
@@ -475,7 +482,7 @@ void warn_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct ad
 	{
 		check_lockstate(fd_sensora,fd_sensorb,&Hall_Sensor);
 		usleep(500*1000);//0.5s
-		if(cnt_lock++ > 60)
+		if(cnt_lock++ > 30)
 		{
 				cnt_lock = 0;
 			//	close(fd_sensora);
@@ -553,7 +560,7 @@ void timeint_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct
 	{
 		check_lockstate(fd_sensora,fd_sensorb,&Hall_Sensor);
 		usleep(500*1000);//0.5s
-		if(cnt_lock++ > 60)
+		if(cnt_lock++ > 30)
 		{
 				cnt_lock = 0;
 				//close(fd_sensora);
@@ -701,7 +708,7 @@ void w315mhz_ask_openlock_process(int fd,int *locker,struct gprs_data	*gprsdata,
 			{
 				check_lockstate(fd_sensora,fd_sensorb,&Hall_Sensor);
 				usleep(500*1000);//0.5s
-				if(cnt_lock++ > 60)
+				if(cnt_lock++ > 30)
 				{
 					cnt_lock = 0;
 					break;
@@ -790,6 +797,12 @@ void w315mhz_ask_closelock_process(int fd,int *locker,struct gprs_data	*gprsdata
 		if(ret == SUCCESS)
 		{
 			gprsdata->process_state = SUCCESS;
+#if 1
+			/*************************************/
+			printf("\nCCCCCCCC\nCCCCCCCCCCCCCC\nCCCCCCCCCCCCCCC\n");
+			Gprs_put_success_alarm();
+			/*************************************/
+#endif
 		}
 		else
 		{
@@ -861,9 +874,12 @@ int master_monitor(int argc, char *argv[])
 {
 	int fd_gprs_copy;
 	int fd_rtc;
+
+    static int warn_notifi_cnt =0;
+	
 	g_monitor_started = false;
 	
-	DisLocalTime.system_init = 0;//new add by liubofei 2017-12-29
+	DisLocalTime.system_init = SYSTIME_NOINIT;//new add by liubofei 2017-12-29
 	
 	fd_gprs_copy = open(CONFIG_EXAMPLES_GPRS_DEVPATH, O_RDWR | O_NOCTTY | O_NONBLOCK | O_NDELAY);
 	if (fd_gprs_copy < 0)
@@ -880,13 +896,14 @@ int master_monitor(int argc, char *argv[])
 	}
 	
 	getRtcTime(fd_rtc,&rtctime);
-	printf("read rtc:%d%d%d%d%d%d\n",rtctime.tm_year,rtctime.tm_mon,rtctime.tm_mday,
-						  rtctime.tm_hour,rtctime.tm_min,rtctime.tm_sec);
+	printf("read rtc:%04d%02d%02d%02d%02d%02d\n",rtctime.tm_year,rtctime.tm_mon,rtctime.tm_mday,rtctime.tm_hour,rtctime.tm_min,rtctime.tm_sec);
 	setSystime(&rtctime);
+	
     sleep(5);
 	//new add by liubofei 2017-12-26
 	first_getvcc(&g_AdcConVar,&g_AdcMutex,DATA_NUM);
 	sleep(1);
+	printf("master_monitor start .............................................................\n");
 	//end
 	//new add by liubofei 2018-01-04 for gprs always online
 
@@ -919,9 +936,9 @@ int master_monitor(int argc, char *argv[])
 			}
 			SensorDate.adcmsg->VCC_middle=filter(DATA_NUM);
 			
-			printf("%s: value: %.2f %.1fv\n", "VCC_middle",SensorDate.adcmsg->VCC_middle,(int)(SensorDate.adcmsg->VCC_middle*10)/10.0);
-			printf("%s: value: %.2f m\n", "SensorDate.adcmsg.Water_high", SensorDate.adcmsg->Water_high);
-			printf("%s: value: %.2f v\n", "SensorDate.adcmsg.Light", SensorDate.adcmsg->Light);
+			//printf("%s: value: %.2f %.1fv\n", "VCC_middle",SensorDate.adcmsg->VCC_middle,(int)(SensorDate.adcmsg->VCC_middle*10)/10.0);
+			//printf("%s: value: %.2f m\n", "SensorDate.adcmsg.Water_high", SensorDate.adcmsg->Water_high);
+			//printf("%s: value: %.2f v\n", "SensorDate.adcmsg.Light", SensorDate.adcmsg->Light);
 
 			//end
 			
@@ -930,21 +947,32 @@ int master_monitor(int argc, char *argv[])
 			//changed by liubofei 2017-12-26
 			//if((SensorDate.adcmsg->VCC <= alarmdata.vcc_mb)||(SensorDate.adcmsg->Water_high >= alarmdata.water ))
 			
-			printf("SensorDate.adcmsg->VCC_middle =%.1f,SensorDate.adcmsg->Water_high=%.2f\n",SensorDate.adcmsg->VCC_middle,SensorDate.adcmsg->Water_high);
-			printf("alarmdata.vcc_mb=%.1f,alarmdata.water=%.2f\n",alarmdata.vcc_mb,alarmdata.water);
-			printf("timingA=%2d:%2d,timingB=%2d:%2d\n",alarmdata.timingA_hour,alarmdata.timingA_min,alarmdata.timingB_hour,alarmdata.timingB_min);
+			//printf("SensorDate.adcmsg->VCC_middle =%.1f,SensorDate.adcmsg->Water_high=%.2f\n",SensorDate.adcmsg->VCC_middle,SensorDate.adcmsg->Water_high);
+			//printf("alarmdata.vcc_mb=%.1f,alarmdata.water=%.2f\n",alarmdata.vcc_mb,alarmdata.water);
+			//printf("timingA=%2d:%2d,timingB=%2d:%2d\n",alarmdata.timingA_hour,alarmdata.timingA_min,alarmdata.timingB_hour,alarmdata.timingB_min);
 			if((SensorDate.adcmsg->VCC_middle <= alarmdata.vcc_mb)||(SensorDate.adcmsg->Water_high >= alarmdata.water ))
 			{
-				if(!pthread_mutex_trylock(&g_MonitorMutex))
+				//add by liushuhe 2018.01.23    
+				//adc 采集可能出错,这里连续检测到10次紧急报警，才执行，否则丢弃
+				warn_notifi_cnt++;
+				if(warn_notifi_cnt > 10)
 				{
-					printf("WarningUpload get g_MonitorMutex Lock OK!\n");
-					Msg485Data.type 	=	WARN_UPLOAD;
-					pthread_mutex_unlock(&g_MonitorMutex);
+					warn_notifi_cnt = 0;
+					if(!pthread_mutex_trylock(&g_MonitorMutex))
+					{
+						printf("WarningUpload get g_MonitorMutex Lock OK!\n");
+						Msg485Data.type 	=	WARN_UPLOAD;
+						pthread_mutex_unlock(&g_MonitorMutex);
+					}
+					else
+					{
+						printf("WarningUpload get g_MonitorMutex Lock fail!\n");
+					}
 				}
-				else
-				{
-					printf("WarningUpload get g_MonitorMutex Lock fail!\n");
-				}
+			}
+			else
+			{
+				warn_notifi_cnt = 0;
 			}
 		}
 		/*************************************************************************/

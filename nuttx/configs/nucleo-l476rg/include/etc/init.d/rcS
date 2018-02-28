@@ -4,8 +4,8 @@ lid_master &
 
 echo "lid master star up!!!\n"
 
-mkrd -m 2 -s 100 100
-mkfatfs /dev/ram2
-mount -t vfat /dev/ram2 /tmp
+#mkrd -m 2 -s 100 100
+#mkfatfs /dev/ram2
+#mount -t vfat /dev/ram2 /tmp
 
 #lid_master &

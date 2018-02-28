@@ -394,5 +394,24 @@ config EXAMPLES_FLASH_DEVPATH
 	
 endif #flash
 
+#task wdt
+config EXAMPLES_MASTER_WDT
+	bool "wdt task"
+	default n
+	depends on EXAMPLES_LID_MASTER
+	---help---
+		Enable the wdt task
+
+if EXAMPLES_MASTER_WDT
+
+config EXAMPLES_WDT_PRIORITY
+	int "wdt task priority"
+	default 100
+
+config EXAMPLES_WDT_STACKSIZE
+	int "wdt stack size"
+	default 2048
+	
+endif # EXAMPLES_WDT
 
 endif # EXAMPLES_LID_MASTER

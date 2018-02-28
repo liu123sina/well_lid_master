@@ -139,8 +139,8 @@ void pthread_check_gprs_always_online(void * arg)
 						printf("Error:write  Data to gprs--->GPRS ASK\n");
 					}
 				
-					sleep(8);
-					if(time_cnt++ > 6)
+					sleep(3);
+					if(time_cnt++ > 2)
 					{
 						GprsData.msg_gprs_online = NOACK;
 						time_cnt = 0;
@@ -190,9 +190,9 @@ int  gprs_warn_upload(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,str
 								"NULL","NULL","NULL","NULL",adc_dada->Water_high,adc_dada->VCC,
 								DEV_ID);
 		*///changed by liubofei 2017-12-26
-		sprintf(gprs->msgbuf,"##time=%4d%d%d%d%d%d%d%d%d%d%d;msgtype=warnupload#requestok;locker=%s;mb=%.1f;tempretrue=%.1f;humidity=%.1f;co=%s;h2s=%s;nh3=%s;o2=%s;water=%.2f;sb=%.1f;id=%3d@@\n",
-								DisLocalTime.Year,DisLocalTime.Month/10,DisLocalTime.Month%10,DisLocalTime.Day/10,DisLocalTime.Day%10,
-								DisLocalTime.Hour/10,DisLocalTime.Hour%10,DisLocalTime.Minute/10,DisLocalTime.Minute%10,DisLocalTime.Second/10,DisLocalTime.Second%10,
+		sprintf(gprs->msgbuf,"##time=%04d%02d%02d%02d%02d%02d;msgtype=warnupload#requestok;locker=%s;mb=%.1f;tempretrue=%.1f;humidity=%.1f;co=%s;h2s=%s;nh3=%s;o2=%s;water=%.2f;sb=%.1f;id=%3d@@\n",
+								DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,
+								DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second,
 								sensor->lockstr,(int)(adc_dada->VCC_middle*10)/10.0,(int)(adc_dada->tempretrue*10)/10.0,(int)(adc_dada->humidity*10)/10.0,
 								"NULL","NULL","NULL","NULL",(int)(adc_dada->Water_high*100)/100.0,(int)(adc_dada->VCC_middle*10)/10.0,
 								DEV_ID);
@@ -204,8 +204,8 @@ int  gprs_warn_upload(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,str
 			printf("Error:write  Data to gprs\n");
 		}
 	
-		sleep(8);
-		if(cnt++ >= 5)
+		sleep(3);
+		if(cnt++ >= 2)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -237,9 +237,9 @@ int  gprs_timeint_upload(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,
 								adc_dada->CO,adc_dada->H2S,adc_dada->NH3,adc_dada->O2,adc_dada->Water_high,adc_dada->VCC,
 								DEV_ID);
 		*///changed by liubofei 2017-12-26
-		sprintf(gprs->msgbuf,"##time=%4d%d%d%d%d%d%d%d%d%d%d;msgtype=timingupload#requestok;locker=%s;mb=%.1f;tempretrue=%.1f;humidity=%.1f;co=%.1f;h2s=%.1f;nh3=%.1f;o2=%.1f;water=%.2f;sb=%.1f;id=%3d@@\n",
-								DisLocalTime.Year,DisLocalTime.Month/10,DisLocalTime.Month%10,DisLocalTime.Day/10,DisLocalTime.Day%10,
-								DisLocalTime.Hour/10,DisLocalTime.Hour%10,DisLocalTime.Minute/10,DisLocalTime.Minute%10,DisLocalTime.Second/10,DisLocalTime.Second%10,
+		sprintf(gprs->msgbuf,"##time=%04d%02d%02d%02d%02d%02d;msgtype=timingupload#requestok;locker=%s;mb=%.1f;tempretrue=%.1f;humidity=%.1f;co=%.1f;h2s=%.1f;nh3=%.1f;o2=%.1f;water=%.2f;sb=%.1f;id=%3d@@\n",
+								DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,
+								DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second,
 								sensor->lockstr,(int)(adc_dada->VCC_middle*10)/10.0,(int)(adc_dada->tempretrue*10)/10.0,(int)(adc_dada->humidity*10)/10.0,
 								(int)(adc_dada->CO*10)/10.0,(int)(adc_dada->H2S*10)/10.0,(int)(adc_dada->NH3*10)/10.0,(int)(adc_dada->O2*10)/10.0,(int)(adc_dada->Water_high*100)/100.0,(int)(adc_dada->VCC_middle*10)/10.0,
 								DEV_ID);
@@ -251,8 +251,8 @@ int  gprs_timeint_upload(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,
 		{
 			printf("Error:write  Data to gprs\n");
 		}
-		sleep(8);
-		if(cnt++ >= 5)
+		sleep(3);
+		if(cnt++ >= 2)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -280,18 +280,18 @@ int  gprs_openlock(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,struct
 
         if(1 == num)
         {
-			sprintf(gprs->msgbuf,"##time=%4d%d%d%d%d%d%d%d%d%d%d;msgtype=openlock#request;locker=%s;mb=%.1f;tempretrue=%s;humidity=%s;co=%s;h2s=%s;nh3=%s;o2=%s;water=%.2f;sb=%.1f;id=%3d@@\n",
-									DisLocalTime.Year,DisLocalTime.Month/10,DisLocalTime.Month%10,DisLocalTime.Day/10,DisLocalTime.Day%10,
-									DisLocalTime.Hour/10,DisLocalTime.Hour%10,DisLocalTime.Minute/10,DisLocalTime.Minute%10,DisLocalTime.Second/10,DisLocalTime.Second%10,
+			sprintf(gprs->msgbuf,"##time=%04d%02d%02d%02d%02d%02d;msgtype=openlock#request;locker=%s;mb=%.1f;tempretrue=%s;humidity=%s;co=%s;h2s=%s;nh3=%s;o2=%s;water=%.2f;sb=%.1f;id=%3d@@\n",
+									DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,
+									DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second,
 								  sensor->lockstr,(int)(adc_dada->VCC_middle*10)/10.0,"NULL","NULL",
 								  "NULL","NULL","NULL","NULL",(int)(adc_dada->Water_high*100)/100.0,(int)(adc_dada->VCC_middle*10)/10.0,
 								  DEV_ID);
 	    }
 	    else if(2 == num)
 	    {
-				sprintf(gprs->msgbuf,"##time=%4d%d%d%d%d%d%d%d%d%d%d;msgtype=openlock#requestok;locker=%s;mb=%.1f;tempretrue=%s;humidity=%s;co=%s;h2s=%s;nh3=%s;o2=%s;water=%.2f;sb=%.1f;id=%3d@@\n",
-								DisLocalTime.Year,DisLocalTime.Month/10,DisLocalTime.Month%10,DisLocalTime.Day/10,DisLocalTime.Day%10,
-								DisLocalTime.Hour/10,DisLocalTime.Hour%10,DisLocalTime.Minute/10,DisLocalTime.Minute%10,DisLocalTime.Second/10,DisLocalTime.Second%10,
+				sprintf(gprs->msgbuf,"##time=%04d%02d%02d%02d%02d%02d;msgtype=openlock#requestok;locker=%s;mb=%.1f;tempretrue=%s;humidity=%s;co=%s;h2s=%s;nh3=%s;o2=%s;water=%.2f;sb=%.1f;id=%3d@@\n",
+								DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,
+								DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second,
 							  sensor->lockstr,(int)(adc_dada->VCC_middle*10)/10.0,"NULL","NULL",
 							  "NULL","NULL","NULL","NULL",(int)(adc_dada->Water_high*100)/100.0,(int)(adc_dada->VCC_middle*10)/10.0,
 							  DEV_ID);
@@ -304,8 +304,8 @@ int  gprs_openlock(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,struct
 			printf("Error:write  Data to gprs\n");
 		}
 		//wait
-		sleep(8);
-		if(cnt++ >= 5)
+		sleep(3);
+		if(cnt++ >= 2)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -340,9 +340,9 @@ int  gprs_closelock(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,struc
 							  "NULL","NULL","NULL","NULL",adc_dada->Water_high,adc_dada->VCC,
 							  DEV_ID);
 		*///changed by liubofei 2017-12-26
-		sprintf(gprs->msgbuf,"##time=%4d%d%d%d%d%d%d%d%d%d%d;msgtype=closelock#requestok;locker=%s;mb=%.1f;tempretrue=%s;humidity=%s;co=%s;h2s=%s;nh3=%s;o2=%s;water=%.2f;sb=%.1f;id=%3d@@\n",
-								DisLocalTime.Year,DisLocalTime.Month/10,DisLocalTime.Month%10,DisLocalTime.Day/10,DisLocalTime.Day%10,
-								DisLocalTime.Hour/10,DisLocalTime.Hour%10,DisLocalTime.Minute/10,DisLocalTime.Minute%10,DisLocalTime.Second/10,DisLocalTime.Second%10,
+		sprintf(gprs->msgbuf,"##time=%04d%02d%02d%02d%02d%02d;msgtype=closelock#requestok;locker=%s;mb=%.1f;tempretrue=%s;humidity=%s;co=%s;h2s=%s;nh3=%s;o2=%s;water=%.2f;sb=%.1f;id=%3d@@\n",
+								DisLocalTime.Year,DisLocalTime.Month,DisLocalTime.Day,
+								DisLocalTime.Hour,DisLocalTime.Minute,DisLocalTime.Second,
 							  sensor->lockstr,(int)(adc_dada->VCC_middle*10)/10.0,"NULL","NULL",
 							  "NULL","NULL","NULL","NULL",(int)(adc_dada->Water_high*100)/100.0,(int)(adc_dada->VCC_middle*10)/10.0,
 							  DEV_ID);
@@ -353,8 +353,8 @@ int  gprs_closelock(int fd,struct gprs_data *gprs,struct adc_msg *adc_dada,struc
 			printf("Error:write  Data to gprs\n");
 		}
 		//wait
-		sleep(8);
-		if(cnt++ >= 5)
+		sleep(3);
+		if(cnt++ >= 2)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -571,8 +571,12 @@ int  into_establish(int fd,struct	gprs_data *gprs)
 			printf("into_establish---> while(1)--RCV_ERROR\n");
 			break;
 		}
+		/*
 		usleep(1000*1000);
 		if(cnt++ > 30)
+		*/
+		usleep(500*1000);
+		if(cnt++ > 10)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -721,9 +725,12 @@ int  gprs_register(int fd,struct	gprs_data *gprs)
 		{
 			printf("Error:write  Data to gprs\n");
 		}
-	
+		/*
 		sleep(1);
 		if(cnt++ > 60)
+		*/
+		usleep(500*1000);
+		if(cnt++ > 30)
 		{
 			gprs->msgack = NOACK;
 			return FAIL;
@@ -945,8 +952,9 @@ int my_read2(int fd, char *buffer, int length)
  ****************************************************************************/
 int master_gprs(int argc, char *argv[])
 {
-	struct timeval timeout;
-	fd_set 	rfds;	
+	//struct timeval timeout;
+	//fd_set 	rfds;	
+	
 	int		fd_rtc;
 	
     char   *pcTempBuf[200];
@@ -957,10 +965,10 @@ int master_gprs(int argc, char *argv[])
 	char 	cArray[200];
 	char 	rcvmsg[200];
 	
-	int  	iRet = 0;
+	//int  	iRet = 0;
 	int  	iBytes = 0;
 	int  	rcvmsg_ok = 0;
-
+	
 	GprsData.msgack		= NOACK;
 	
 	g_gprs_started = true;
@@ -980,6 +988,9 @@ int master_gprs(int argc, char *argv[])
 		int errcode = errno;
 		printf("rtc0: ERROR: Failed to open %s: %d\n",CONFIG_EXAMPLES_RTC_DEVPATH, errcode);
 	}
+
+	printf("master_gprs start .............................................................\n");
+
 
 	/*
 	//gprs power
@@ -1158,19 +1169,58 @@ int master_gprs(int argc, char *argv[])
 						{
 							if(strstr(pcTempBuf[i],"##time=") != NULL)
 							{
-	   							rtctime.tm_year	= ((pcTempBuf[i][7]-0x30)*1000 + (pcTempBuf[i][8]-0x30)*100 +
-												  (pcTempBuf[i][9]-0x30)*10   + (pcTempBuf[i][10]-0x30))-1900;
-	   							rtctime.tm_mon 	= ((pcTempBuf[i][11]-0x30)*10   + (pcTempBuf[i][12]-0x30)) - 1;						
-	   							rtctime.tm_mday	= (pcTempBuf[i][13]-0x30)*10   + (pcTempBuf[i][14]-0x30);
-	   							rtctime.tm_hour	= ((pcTempBuf[i][15]-0x30)*10   + (pcTempBuf[i][16]-0x30));
-	   							rtctime.tm_min	= (pcTempBuf[i][17]-0x30)*10   + (pcTempBuf[i][18]-0x30);
-	   							rtctime.tm_sec	= (pcTempBuf[i][19]-0x30)*10   + (pcTempBuf[i][20]-0x30);
+                                if((pcTempBuf[i][7] == '2')&&
+								    (pcTempBuf[i][8] == '0')&&
+								    (pcTempBuf[i][9] >= '0')&&(pcTempBuf[i][9] <= '9')&&
+								    (pcTempBuf[i][10] >= '0')&&(pcTempBuf[i][10] <= '9')&&
+								    //mon
+								    (pcTempBuf[i][11] >= '0')&&(pcTempBuf[i][11] <= '1')&&
+								    (pcTempBuf[i][12] >= '0')&&(pcTempBuf[i][12] <= '9')&&
+								    //day
+								    (pcTempBuf[i][13] >= '0')&&(pcTempBuf[i][13] <= '3')&&
+								    (pcTempBuf[i][14] >= '0')&&(pcTempBuf[i][14] <= '9')&&
+								    //hour
+								    (pcTempBuf[i][15] >= '0')&&(pcTempBuf[i][15] <= '2')&&
+								    (pcTempBuf[i][16] >= '0')&&(pcTempBuf[i][16] <= '9')&&
+								    //min
+								    (pcTempBuf[i][17] >= '0')&&(pcTempBuf[i][17] <= '6')&&
+								    (pcTempBuf[i][18] >= '0')&&(pcTempBuf[i][18] <= '9')&&
+								    //sec
+								    (pcTempBuf[i][19] >= '0')&&(pcTempBuf[i][19] <= '6')&&
+								    (pcTempBuf[i][20] >= '0')&&(pcTempBuf[i][20] <= '9'))
+                                {
+		                     					
+		   							rtctime.tm_year	= ((pcTempBuf[i][7]-0x30)*1000 + (pcTempBuf[i][8]-0x30)*100 +
+													  		(pcTempBuf[i][9]-0x30)*10   + (pcTempBuf[i][10]-0x30))-1900;
+		   							rtctime.tm_mon 	= ((pcTempBuf[i][11]-0x30)*10   + (pcTempBuf[i][12]-0x30)) - 1;						
+		   							rtctime.tm_mday	= (pcTempBuf[i][13]-0x30)*10   + (pcTempBuf[i][14]-0x30);
+		   							rtctime.tm_hour	= ((pcTempBuf[i][15]-0x30)*10   + (pcTempBuf[i][16]-0x30));
+		   							rtctime.tm_min	= (pcTempBuf[i][17]-0x30)*10   + (pcTempBuf[i][18]-0x30);
+		   							rtctime.tm_sec	= (pcTempBuf[i][19]-0x30)*10   + (pcTempBuf[i][20]-0x30);
 
-								printf("gprs:%d:%d:%d:%d:%d:%d\n",rtctime.tm_year,rtctime.tm_mon,rtctime.tm_mday,
-													  rtctime.tm_hour,rtctime.tm_min,rtctime.tm_sec);
-								setRtcTime(fd_rtc,&rtctime);
-								getRtcTime(fd_rtc,&rtctime);
-								setSystime(&rtctime);
+									printf("<%s>gprs:%d:%d:%d:%d:%d:%d\n",pcTempBuf[i],rtctime.tm_year,rtctime.tm_mon,rtctime.tm_mday,
+																	  rtctime.tm_hour,rtctime.tm_min,rtctime.tm_sec);
+
+									gprstime_init.Year   = rtctime.tm_year + 1900;
+									gprstime_init.Month  = rtctime.tm_mon  + 1;
+									gprstime_init.Day    = rtctime.tm_mday;
+									gprstime_init.Hour   = rtctime.tm_hour;
+									gprstime_init.Minute = rtctime.tm_min;
+									gprstime_init.Second = rtctime.tm_sec;
+
+                                    if((gprstime_init.Year >= 2018)&&(gprstime_init.Year <= 2036)&&
+										(gprstime_init.Month >= 1)&&(gprstime_init.Month <= 12)&&
+										(gprstime_init.Day >= 1)&&(gprstime_init.Day <= 31)&&
+										(gprstime_init.Hour >= 0)&&(gprstime_init.Hour <= 23)&&
+										(gprstime_init.Minute >= 0)&&(gprstime_init.Minute <= 59)&&
+										(gprstime_init.Second >= 0)&&(gprstime_init.Second <= 59))
+										
+                                    {
+										setRtcTime(fd_rtc,&rtctime);
+										getRtcTime(fd_rtc,&rtctime);
+										setSystime(&rtctime);
+                                    }
+								}
 							}
 						}
 					}

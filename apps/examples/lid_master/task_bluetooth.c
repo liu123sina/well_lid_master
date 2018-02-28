@@ -139,6 +139,10 @@ int master_bluetooth(int argc, char *argv[])
 		printf("bluetooth: ERROR: Failed to open %s: %d\n",CONFIG_EXAMPLES_BLUETOOTH_DEVPATH, errcode);
 		goto errout;
 	}
+
+	printf("master_bluetooth start .............................................................\n");
+
+	
 	bluetooth_init();	
 	boardctl(BOARDIOC_BLUEDEV_POWER_DISABLE, 0);			//power off
 	while(1)

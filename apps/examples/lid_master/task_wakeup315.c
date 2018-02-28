@@ -136,11 +136,11 @@ int check_wakeup_sinal(int fd,struct	hall_sensor *sensor)
  ****************************************************************************/
 int wakeup_315(int argc, char *argv[])
 {
-	enum gpio_pintype_e pintype;
-	struct sigaction act;
-	struct sigaction oldact;
-	int ret;
-	int status;
+	//enum gpio_pintype_e pintype;
+	//struct sigaction act;
+	//struct sigaction oldact;
+	//int ret;
+	//int status;
 	int cnt = 0;
 	
 	g_wakeup315_started = true;
@@ -151,6 +151,10 @@ int wakeup_315(int argc, char *argv[])
 		printf("slave_wakeup: open %s failed: %d\n", CONFIG_EXAMPLES_WKUP315_DEVPATH, errno);
 		goto errout;
 	}
+
+	printf("wakeup_315 start .............................................................\n");
+
+	
 	/*
 	ret = ioctl(fd_wakeup, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
 	if (ret < 0)

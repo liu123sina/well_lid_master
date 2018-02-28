@@ -199,8 +199,10 @@
 
 #define 	BOARDIOC_LSENSOR_PWRON			BOARDIOC_USER + 27
 #define 	BOARDIOC_LSENSOR_PWROFF			BOARDIOC_USER + 28
-
-
+/* new add by liubofei 2018-01-29 */
+#define 	BOARDIOC_EXT_WDT_PWRON			BOARDIOC_USER + 29
+#define 	BOARDIOC_EXT_WDT_PWROFF			BOARDIOC_USER + 30
+/* end */
 /****************************************************************************
  * Public Type Definitions
  ****************************************************************************/

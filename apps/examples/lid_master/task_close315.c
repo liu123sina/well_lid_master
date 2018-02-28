@@ -93,11 +93,11 @@ int check_close315_sinal(int fd,struct	hall_sensor *sensor)
  ****************************************************************************/
 int closelock_315(int argc, char *argv[])
 {
-	enum gpio_pintype_e pintype;
-	struct sigaction act;
-	struct sigaction oldact;
-	int ret;
-	int status;
+	//enum gpio_pintype_e pintype;
+	//struct sigaction act;
+	//struct sigaction oldact;
+	//int ret;
+	//int status;
 	int cnt = 0;
 	g_close315_started = true;
 
@@ -117,6 +117,10 @@ int closelock_315(int argc, char *argv[])
 		close(fd_close);
 		return EXIT_FAILURE;
 	}
+
+	printf("closelock_315 start .............................................................\n");
+
+
 
 	//signal
 	memset(&act, 0, sizeof(struct sigaction));
