@@ -471,13 +471,14 @@ void warn_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct ad
 //end	
 	while(ret == FAIL)
 	{
-		ret = gprs_rst(fd,gprsdata);
-		if(cnt++ > 3)
+
+		if(cnt++ >= 3)
 		{
 			cnt = 0;
 			Gprsfail_buzz_alarm();			
 			break;
 		}
+		ret = gprs_rst(fd,gprsdata);
 	}
 		
 	if(ret == SUCCESS)
@@ -548,13 +549,14 @@ void timeint_upload_process(int fd,int *locker,struct gprs_data	*gprsdata,struct
 	
 	while(ret == FAIL)
 	{
-		ret = gprs_rst(fd,gprsdata);
-		if(cnt++ > 3)
+
+		if(cnt++ >= 3)
 		{
 			cnt = 0;
 			Gprsfail_buzz_alarm();			
 			break;
 		}
+		ret = gprs_rst(fd,gprsdata);
 	}
 
 	if(ret == SUCCESS)
@@ -620,13 +622,14 @@ void w315mhz_ask_openlock_process(int fd,int *locker,struct gprs_data	*gprsdata,
 	
 	while(ret == FAIL)
 	{
-		ret = gprs_rst(fd,gprsdata);
-		if(cnt++ > 3)
+		
+		if(cnt++ >= 3)
 		{
 			cnt = 0;
 			Gprsfail_buzz_alarm();			
 			break;
 		}
+		ret = gprs_rst(fd,gprsdata);
 	}
 	if(ret == SUCCESS)
 	{
@@ -751,13 +754,14 @@ void w315mhz_ask_closelock_process(int fd,int *locker,struct gprs_data	*gprsdata
 //end
 	while(ret == FAIL)
 	{
-		ret = gprs_rst(fd,gprsdata);
-		if(cnt++ > 3)
+
+		if(cnt++ >= 3)
 		{
 			cnt = 0;
 			Gprsfail_buzz_alarm();			
 			break;
 		}
+		ret = gprs_rst(fd,gprsdata);
 	}
 	if(ret == SUCCESS)
 	{
@@ -795,13 +799,14 @@ void bluetooth_openlock_process(int fd,int  *locker,struct gprs_data	*gprsdata,s
 	int cnt = 0;
 	while(ret == FAIL)
 	{
-		ret = gprs_rst(fd,gprsdata);
-		if(cnt++ > 3)
+
+		if(cnt++ >= 3)
 		{
 			cnt = 0;
 			Gprsfail_buzz_alarm();			
 			break;
 		}
+		ret = gprs_rst(fd,gprsdata);
 	}
 	if(ret == SUCCESS)
 	{
