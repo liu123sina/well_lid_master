@@ -97,19 +97,19 @@ int bluetooth_init(void)
 	usleep(100*1000L);
 	//wakeup	
 	boardctl(BOARDIOC_BLUEDEV_WAKEUP_ENABLE, 0);			//gpio  lower
-	usleep(1200*1000L);
+	usleep(200*1000L);
 	//go data mode 
 	boardctl(BOARDIOC_BLUEDEV_WAKEUP_DISABLE, 0);			//gpio  hight
 
 	//open msg notifier
 	write(fd_blue,"AT+NOTI[Y]",strlen("AT+NOTI[Y]"));
-	usleep(1000*1000L);                                     
+	usleep(200*1000L);                                     
 	//set name 
 	write(fd_blue,"AT+NAME[BLUE-TEST]",strlen("AT+NAME[BLUE-TEST]"));
-	usleep(1000*1000L);                                     
+	usleep(200*1000L);                                     
 	//set mode slave 
 	write(fd_blue,"AT+ROLE[P]",strlen("AT+ROLE[P]"));
-	usleep(1000*1000L);
+	usleep(200*1000L);
 	//set transmits 4db 
 	write(fd_blue,"AT+POWE[D]",strlen("AT+POWE[D]"));
 
